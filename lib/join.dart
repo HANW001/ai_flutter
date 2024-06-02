@@ -1,7 +1,7 @@
-import 'package:ai_frontend/component/cafe24_join.dart';
+import 'package:ai_frontend/component/cafe24/cafe24_join.dart';
 import 'package:flutter/material.dart';
 
-import 'component/imweb_join.dart';
+import 'component/imweb/imweb_join.dart';
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});

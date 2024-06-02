@@ -43,17 +43,34 @@ class _LoginPageState extends State<LoginPage> {
         // Store the token securely
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
-        var data = (jsonResponse['userData']);
-        print(data);
-        Provider.of<AuthState>(context, listen: false)
-            .updateUserData((data[0]));
-        final authState = Provider.of<AuthState>(context,
-            listen: false); // Use listen: false when not updating UI
-        print('Current mall: ${authState.id}');
-        print('Current mall: ${authState.clientSecretkey}');
-        // print(authState.mall)
-        // Navigate to a protected route
-        GoRouter.of(context).go('/home');
+        var siteData = jsonResponse['loginSite'];
+        Provider.of<SiteState>(context, listen: false)
+            .updateUrlData((siteData));
+        if (siteData == 'cafe24') {
+          var data = (jsonResponse['userData']);
+          print(data);
+          Provider.of<Cafe24AuthState>(context, listen: false)
+              .updateUserData((data[0]));
+          final authState = Provider.of<Cafe24AuthState>(context,
+              listen: false); // Use listen: false when not updating UI
+          print('Current mall: ${authState.id}');
+          print('Current mall: ${authState.clientSecretkey}');
+          // print(authState.mall)
+          // Navigate to a protected route
+          GoRouter.of(context).go('/home');
+        } else {
+          var data = (jsonResponse['userData']);
+          print(data);
+          Provider.of<ImwebAuthState>(context, listen: false)
+              .updateUserData((data[0]));
+          final authState = Provider.of<ImwebAuthState>(context,
+              listen: false); // Use listen: false when not updating UI
+          print('Current mall: ${authState.id}');
+          print('Current mall: ${authState.apikey}');
+          // print(authState.mall)
+          // Navigate to a protected route
+          GoRouter.of(context).go('/home');
+        }
       } else {
         // Handle login error (e.g., display an error message)
         ScaffoldMessenger.of(context)

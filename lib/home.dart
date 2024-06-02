@@ -1,8 +1,9 @@
+import 'package:ai_frontend/component/imweb/imweb_order.dart';
 import 'package:ai_frontend/component/tab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'component/orderPage.dart';
+import 'component/cafe24/cafe24_order.dart';
 import 'provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +13,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _TabBarScreenState();
 }
 
+late final authState;
+
 class _TabBarScreenState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
@@ -19,6 +22,12 @@ class _TabBarScreenState extends State<HomePage>
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
+    final site = Provider.of<SiteState>(context, listen: false);
+    if (site == 'cafe24') {
+      authState = Provider.of<Cafe24AuthState>(context, listen: false);
+    } else {
+      authState = Provider.of<ImwebAuthState>(context, listen: false);
+    }
     super.initState();
   }
 
@@ -30,19 +39,34 @@ class _TabBarScreenState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    final authState = Provider.of<AuthState>(context, listen: false);
+    final site = Provider.of<SiteState>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(authState.mall.toString()),
       ),
       // body에 TabBarView을 bottomNavigationBar에 TabBar 위젯을 넣는다.
-      body: TabBarView(
+      body: IndexedStack(
+        index: site == 'cafe24' ? 0 : 1, // Index based on site
         children: <Widget>[
-          OrderPage(), // Tab 1
-          TabPage(texts: authState.clientId), // Tab 2
-          TabPage(texts: authState.id), // Tab 3
+          TabBarView(
+            // TabBarView for cafe24
+            children: <Widget>[
+              Cafe24OrderPage(), // Tab 1
+              TabPage(texts: authState.servicekey), // Tab 2
+              TabPage(texts: authState.id), // Tab 3
+            ],
+            controller: tabController,
+          ),
+          TabBarView(
+            // TabBarView for imweb
+            children: <Widget>[
+              ImwebOrderPage(), // Tab 1 (imweb-specific)
+              TabPage(texts: authState.servicekey), // Tab 2
+              TabPage(texts: authState.id), // Tab 3
+            ],
+            controller: tabController,
+          ),
         ],
-        controller: tabController,
       ),
       bottomNavigationBar: TabBar(
         tabs: <Tab>[

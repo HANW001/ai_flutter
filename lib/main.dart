@@ -23,7 +23,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => AuthState(),
+          create: (context) => SiteState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Cafe24AuthState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ImwebAuthState(),
         ),
         ChangeNotifierProvider(
           create: (context) => UrlState(),
