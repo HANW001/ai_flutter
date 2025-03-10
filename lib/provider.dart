@@ -14,7 +14,9 @@ class SiteState extends ChangeNotifier {
 
 class Cafe24AuthState extends ChangeNotifier {
   String? mall;
+
   String? id;
+
   String? clientId;
   String? clientSecretkey;
   String? servicekey;
